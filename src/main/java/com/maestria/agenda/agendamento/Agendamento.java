@@ -27,8 +27,11 @@ public class Agendamento {
     @Enumerated(EnumType.STRING)
     private Servicos servico;
 
-    private LocalDate data;
-    private LocalTime hora;
+    private LocalDate data; // Mantemos para compatibilidade
+    private LocalTime hora; // Mantemos para compatibilidade
+
+    @Column(name = "data_hora") // Novo campo para data e hora combinadas
+    private LocalDateTime dataHora;
 
     @Column(columnDefinition = "TEXT")
     private String observacao;
@@ -39,12 +42,13 @@ public class Agendamento {
         this.servico = dados.servico();
         this.data = dados.data();
         this.hora = dados.hora();
+        this.dataHora = LocalDateTime.of(dados.data(), dados.hora()); // Combina data e hora
         this.observacao = dados.observacao();
     }
 
     public Agendamento() {}
 
-    // ✅ Getters e Setters
+    // Getters e Setters
     public long getId() {
         return id;
     }
@@ -89,6 +93,14 @@ public class Agendamento {
         this.hora = hora;
     }
 
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+
     public String getObservacao() {
         return observacao;
     }
@@ -97,7 +109,7 @@ public class Agendamento {
         this.observacao = observacao;
     }
 
-    // ✅ Método toString() para logs e debug
+    // Método toString() para logs e debug
     @Override
     public String toString() {
         return "Agendamento{" +
@@ -107,11 +119,12 @@ public class Agendamento {
                 ", servico=" + servico +
                 ", data=" + data +
                 ", hora=" + hora +
+                ", dataHora=" + dataHora +
                 ", observacao='" + observacao + '\'' +
                 '}';
     }
 
-    // ✅ Equals e HashCode para comparações corretas (usando ID como referência)
+    // Equals e HashCode para comparações corretas (usando ID como referência)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,6 +133,11 @@ public class Agendamento {
         return id == that.id;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}
     @Override
     public int hashCode() {
         return Objects.hash(id);
