@@ -96,6 +96,7 @@ public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data
 
 
 
+
     // ✅ Apenas ADMIN pode criar agendamentos
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody DadosCadastroAgendamento dados, @AuthenticationPrincipal UserDetails userDetails) {
