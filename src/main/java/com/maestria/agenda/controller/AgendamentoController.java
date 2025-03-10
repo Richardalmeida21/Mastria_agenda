@@ -72,32 +72,28 @@ public class AgendamentoController {
     }
 
     // Método correto de busca por data
-@GetMapping("/dia")
-public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data, @AuthenticationPrincipal UserDetails userDetails) {
-    if (!userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) &&
-        !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("PROFISSIONAL"))) {
-        logger.warn("❌ Acesso negado a {} para listar agendamentos por data", userDetails.getUsername());
-        return ResponseEntity.status(403).body("Acesso negado. Apenas ADMIN e PROFISSIONAL podem acessar agendamentos por data.");
+    @GetMapping("/dia")
+    public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data, @AuthenticationPrincipal UserDetails userDetails) {
+        if (!userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) &&
+            !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("PROFISSIONAL"))) {
+            logger.warn("❌ Acesso negado a {} para listar agendamentos por data", userDetails.getUsername());
+            return ResponseEntity.status(403).body("Acesso negado. Apenas ADMIN e PROFISSIONAL podem acessar agendamentos por data.");
+        }
+
+        // Parse da data para LocalDate
+        LocalDate dataFormatada = LocalDate.parse(data);
+
+        // Definindo o início e o fim do dia como LocalDateTime
+        LocalDateTime dataInicio = dataFormatada.atStartOfDay();  // Início do dia (00:00)
+        LocalDateTime dataFim = dataFormatada.atTime(23, 59, 59);  // Final do dia (23:59:59)
+
+        // Consultando os agendamentos dentro do intervalo de tempo do dia
+        List<Agendamento> agendamentos = agendamentoRepository.findByDataBetween(dataInicio, dataFim);
+
+        logger.info("🔍 Agendamentos para o dia {}: {}", dataFormatada, agendamentos.size());
+
+        return ResponseEntity.ok(agendamentos);
     }
-
-    // Parse da data para LocalDate
-    LocalDate dataFormatada = LocalDate.parse(data);
-
-    // Definindo o início e o fim do dia como LocalDateTime
-    LocalDateTime dataInicio = dataFormatada.atStartOfDay();  // Início do dia (00:00)
-    LocalDateTime dataFim = dataFormatada.atTime(23, 59, 59);  // Final do dia (23:59:59)
-
-    // Consultando os agendamentos dentro do intervalo de tempo do dia
-    List<Agendamento> agendamentos = agendamentoRepository.findByDataBetween(dataInicio, dataFim);
-
-    logger.info("🔍 Agendamentos para o dia {}: {}", dataFormatada, agendamentos.size());
-
-    return ResponseEntity.ok(agendamentos);
-}
-
-
-
-
 
     // ✅ Apenas ADMIN pode criar agendamentos
     @PostMapping
