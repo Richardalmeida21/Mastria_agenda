@@ -38,15 +38,15 @@ public class Agendamento {
     @Column(columnDefinition = "TEXT")
     private String observacao;
 
-    public Agendamento(DadosCadastroAgendamento dados, Cliente cliente, Profissional profissional) {
-        this.cliente = cliente;
-        this.profissional = profissional;
-        this.servico = dados.servico();
-        this.data = dados.data();
-        this.hora = dados.hora();
-        this.dataHora = LocalDateTime.of(dados.data(), dados.hora()); // Combina data e hora
-        this.observacao = dados.observacao();
-    }
+   public Agendamento(DadosCadastroAgendamento dados, Cliente cliente, Profissional profissional) {
+    this.cliente = cliente;
+    this.profissional = profissional;
+    this.servico = dados.servico();
+    this.data = dados.data();
+    this.hora = dados.hora();
+    this.dataHora = LocalDateTime.of(dados.data(), dados.hora()); // Combina data e hora
+    this.observacao = dados.observacao();
+}
 
     public Agendamento() {}
 
