@@ -15,7 +15,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime; // Importação necessária
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;// Importação necessária
 import java.util.List;
 
 @RestController
