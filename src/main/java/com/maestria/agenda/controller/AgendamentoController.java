@@ -71,7 +71,8 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentos);
     }
 
-    @GetMapping("/dia")
+    // Método correto de busca por data
+@GetMapping("/dia")
 public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data, @AuthenticationPrincipal UserDetails userDetails) {
     if (!userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) &&
         !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("PROFISSIONAL"))) {
@@ -93,6 +94,7 @@ public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data
 
     return ResponseEntity.ok(agendamentos);
 }
+
 
 
 
