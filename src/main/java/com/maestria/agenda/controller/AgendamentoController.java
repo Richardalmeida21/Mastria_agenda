@@ -72,9 +72,8 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentos);
     }
 
-    @GetMapping("/dia")
+   @GetMapping("/dia")
 public ResponseEntity<?> listarPorData(@RequestParam String data, @AuthenticationPrincipal UserDetails userDetails) {
-    // Verifica se o usuário tem permissão (ADMIN ou PROFISSIONAL)
     if (!userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) &&
         !userDetails.getAuthorities().contains(new SimpleGrantedAuthority("PROFISSIONAL"))) {
         logger.warn("❌ Acesso negado a {} para listar agendamentos por data", userDetails.getUsername());
@@ -85,24 +84,21 @@ public ResponseEntity<?> listarPorData(@RequestParam String data, @Authenticatio
         // Converte a string da data para LocalDate
         LocalDate dataFormatada = LocalDate.parse(data); // Formato esperado: yyyy-MM-dd
 
-        // Define o intervalo do dia (início e fim)
+        // Define o intervalo do dia
         LocalDateTime dataInicio = dataFormatada.atStartOfDay();  // Início do dia (00:00)
         LocalDateTime dataFim = dataFormatada.atTime(23, 59, 59);  // Final do dia (23:59:59)
 
-        // Busca os agendamentos no intervalo de tempo
-        List<Agendamento> agendamentos = agendamentoRepository.findByDataBetween(dataInicio, dataFim);
+        // Busca os agendamentos no intervalo
+        List<Agendamento> agendamentos = agendamentoRepository.findByDataHoraBetween(dataInicio, dataFim);
 
         logger.info("🔍 Agendamentos para o dia {}: {}", dataFormatada, agendamentos.size());
 
-        // Retorna a lista de agendamentos
         return ResponseEntity.ok(agendamentos);
 
     } catch (DateTimeParseException e) {
-        // Trata erros de parsing de data
         logger.error("❌ Erro ao parsear a data: {}", data);
         return ResponseEntity.badRequest().body("Formato de data inválido. Use o formato yyyy-MM-dd.");
     } catch (Exception e) {
-        // Trata outros erros inesperados
         logger.error("❌ Erro ao buscar agendamentos por data", e);
         return ResponseEntity.status(500).body("Erro interno ao buscar agendamentos.");
     }
