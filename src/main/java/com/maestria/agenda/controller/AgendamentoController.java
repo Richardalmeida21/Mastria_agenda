@@ -82,7 +82,7 @@ public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data
     // Parse da data para LocalDate
     LocalDate dataFormatada = LocalDate.parse(data);
 
-    // Definindo o início e o fim do dia
+    // Definindo o início e o fim do dia como LocalDateTime
     LocalDateTime dataInicio = dataFormatada.atStartOfDay();  // Início do dia (00:00)
     LocalDateTime dataFim = dataFormatada.atTime(23, 59, 59);  // Final do dia (23:59:59)
 
@@ -93,6 +93,7 @@ public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data
 
     return ResponseEntity.ok(agendamentos);
 }
+
 
 
     // ✅ Apenas ADMIN pode criar agendamentos
