@@ -32,21 +32,25 @@ public class Agendamento {
     private LocalDate data;
     private LocalTime hora;
 
-    @Column(name = "data_hora") // Novo campo para data e hora combinadas
+    @Column(name = "data_hora")
     private LocalDateTime dataHora;
+
+    @Column(name = "duracao", nullable = false)
+    private int duracao; // Duração do procedimento em minutos
 
     @Column(columnDefinition = "TEXT")
     private String observacao;
 
-   public Agendamento(DadosCadastroAgendamento dados, Cliente cliente, Profissional profissional) {
-    this.cliente = cliente;
-    this.profissional = profissional;
-    this.servico = dados.servico();
-    this.data = dados.data();
-    this.hora = dados.hora();
-    this.dataHora = LocalDateTime.of(dados.data(), dados.hora()); // Combina data e hora
-    this.observacao = dados.observacao();
-}
+    public Agendamento(DadosCadastroAgendamento dados, Cliente cliente, Profissional profissional) {
+        this.cliente = cliente;
+        this.profissional = profissional;
+        this.servico = dados.servico();
+        this.data = dados.data();
+        this.hora = dados.hora();
+        this.duracao = dados.duracao();
+        this.dataHora = LocalDateTime.of(dados.data(), dados.hora());
+        this.observacao = dados.observacao();
+    }
 
     public Agendamento() {}
 
@@ -103,6 +107,14 @@ public class Agendamento {
         this.dataHora = dataHora;
     }
 
+    public int getDuracao() {
+        return duracao;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
+    }
+
     public String getObservacao() {
         return observacao;
     }
@@ -111,7 +123,6 @@ public class Agendamento {
         this.observacao = observacao;
     }
 
-    // Método toString() para logs e debug
     @Override
     public String toString() {
         return "Agendamento{" +
@@ -122,11 +133,11 @@ public class Agendamento {
                 ", data=" + data +
                 ", hora=" + hora +
                 ", dataHora=" + dataHora +
+                ", duracao=" + duracao +
                 ", observacao='" + observacao + '\'' +
                 '}';
     }
 
-    // Equals e HashCode para comparações corretas (usando ID como referência)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
