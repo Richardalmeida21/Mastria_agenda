@@ -1,12 +1,13 @@
 package com.maestria.agenda.agendamento;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Objects;
 import com.maestria.agenda.cliente.Cliente;
 import com.maestria.agenda.profissional.Profissional;
 import com.maestria.agenda.servicos.Servicos;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "agendamento")
@@ -27,8 +28,8 @@ public class Agendamento {
     @Enumerated(EnumType.STRING)
     private Servicos servico;
 
-    private LocalDate data; // Mantemos para compatibilidade
-    private LocalTime hora; // Mantemos para compatibilidade
+    private LocalDate data;
+    private LocalTime hora;
 
     @Column(name = "data_hora") // Novo campo para data e hora combinadas
     private LocalDateTime dataHora;
@@ -133,11 +134,6 @@ public class Agendamento {
         return id == that.id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-}
     @Override
     public int hashCode() {
         return Objects.hash(id);
