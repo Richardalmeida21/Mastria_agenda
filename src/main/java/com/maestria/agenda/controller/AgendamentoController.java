@@ -87,8 +87,7 @@ public ResponseEntity<List<Agendamento>> listarPorData(@RequestParam String data
     LocalDateTime dataFim = dataFormatada.atTime(23, 59, 59);  // Final do dia (23:59:59)
 
     // Consultando os agendamentos dentro do intervalo de tempo do dia
-    List<Agendamento> findByDataBetween(LocalDateTime dataInicio, LocalDateTime dataFim);
-
+    List<Agendamento> agendamentos = agendamentoRepository.findByDataBetween(dataInicio, dataFim);
 
     logger.info("🔍 Agendamentos para o dia {}: {}", dataFormatada, agendamentos.size());
 
